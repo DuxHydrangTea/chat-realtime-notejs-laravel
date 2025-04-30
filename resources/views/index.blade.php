@@ -128,7 +128,7 @@
                                                         <div
                                                             class="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white group relative ">
                                                         <p class="message-content">${data.message}</p> 
-                                                            <div class="group-hover:block absolute left-[110%] top-0 bg-blue-200 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-black cursor-pointer p-1 px-3 text-sm button-reply" 
+                                                            <div class="hidden group-hover:block absolute left-[100%] top-0 bg-blue-200 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-black cursor-pointer p-1 px-3 text-sm button-reply" 
                                                             data-reply-id="${data.id}">
                                                                 <p>Reply</p> 
                                                             </div>
