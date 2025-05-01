@@ -16,18 +16,18 @@ class Message extends Model
     CONST AUDIO = 3;
 
     public function user(){
-        return $this->belongsTo(User::class, 'sender_id');
+        return $this->belongsTo(User::class, 'sender');
     }
 
     public function receiver(){
-        return $this->belongsTo(User::class, 'receiver_id');
+        return $this->belongsTo(User::class, 'receiver');
     }
 
     public function reply(){
         return $this->belongsTo(Message::class,'reply_id');
     }
 
-    public function mediaMessage(){
+    public function mediaMessages(){
         return $this->hasMany(MediaMessage::class);
     }
 }
