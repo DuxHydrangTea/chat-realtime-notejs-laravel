@@ -24,7 +24,7 @@ Route::group(
 
 Route::get('login', [AuthController::class, 'login'] )->name('login');
 Route::post('login', [AuthController::class, 'handleLogin'] )->name('handle_login');
-
+Route::get('logout', [AuthController::class, 'logout'] )->name('logout');
 
 
 // Route::post('send-messages', function (HttpRequest $request) {

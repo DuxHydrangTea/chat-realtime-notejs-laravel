@@ -20,12 +20,16 @@
                     <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                         Choose your account
                     </h1>
+                    @php
+                        use App\Models\User;
+                    @endphp
                     <form class="space-y-4 md:space-y-6" action="{{route('handle_login')}}" method="POST">
                         @csrf
                         <select name="id" id="" class="w-full h-[50px] bg-amber-200 rounded-2xl px-2">
-                            <option value="1">User test 1</option>
-                            <option value="2">User test 2</option>
-                        </select>
+                            @foreach ( User::all() as $user )
+                                <option value="{{$user->id}}">{{$user->name}}</option>
+                            @endforeach
+                                                    </select>
                         <button type="submit" class="w-full text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
                        
                     </form>
