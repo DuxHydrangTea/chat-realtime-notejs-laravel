@@ -58,71 +58,72 @@
                 <div class="w-full px-5 flex flex-col justify-between">
                     <div class="flex flex-col mt-5 h-[1000px] overflow-auto" id="message-list">
                         {{-- list   --}}
-                        @forelse ($messages as $message)
-                            @if ($message->sender == auth()->user()->id)
-                                <div class="flex justify-end mb-[40px] reply-message relative ">
-                                    <p class="text-black mr-[10px]">{{ $message->created_at }}</p>
-                                    <div
-                                        class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
-                                        <p class="pb-[10px]">{{ $message->message }}</p>
+                        @isset($otherUser)
+                            @forelse ($messages as $message)
+                                @if ($message->sender == auth()->user()->id)
+                                    <div class="flex justify-end mb-[40px] reply-message relative ">
+                                        <p class="text-black mr-[10px]">{{ $message->created_at }}</p>
+                                        <div
+                                            class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+                                            <p class="pb-[10px]">{{ $message->message }}</p>
 
-                                        @switch($message->media_type)
-                                            @case(Message::IMAGE)
-                                                @foreach ($message->mediaMessages as $media)
-                                                    <img src="{{ $media->media_path }}" alt=""
-                                                        class="rounded-2xl w-[400px]  mb-2" loading="lazy">
-                                                @endforeach
-                                            @break
+                                            @switch($message->media_type)
+                                                @case(Message::IMAGE)
+                                                    @foreach ($message->mediaMessages as $media)
+                                                        <img src="{{ $media->media_path }}" alt=""
+                                                            class="rounded-2xl w-[400px]  mb-2" loading="lazy">
+                                                    @endforeach
+                                                @break
 
-                                            @case(Message::VIDEO)
-                                            @break
+                                                @case(Message::VIDEO)
+                                                @break
 
-                                            @default
-                                        @endswitch
+                                                @default
+                                            @endswitch
 
-                                    </div>
-                                    <img src="{{ $message->user->avatar }}" class="object-cover h-8 w-8 rounded-full"
-                                        alt="" />
-                                    <p class="text-sm absolute top-[100%] right-[38px]">{!! $message->reply_id ? '<strong>Reply to:</strong> ' . $message->reply->message : '' !!}</p>
-                                </div>
-                            @else
-                                <div class="flex justify-start mb-[40px] message-box relative">
-
-                                    <img src="{{ $message->user->avatar }}" class="object-cover h-8 w-8 rounded-full"
-                                        alt="" />
-
-                                    <div
-                                        class="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white group relative ">
-                                        <p class="message-content">{{ $message->message }}</p>
-                                        @switch($message->media_type)
-                                            @case(Message::IMAGE)
-                                                @foreach ($message->mediaMessages as $media)
-                                                    <img src="{{ $media->media_path }}" alt=""
-                                                        class="rounded-2xl w-[400px] object-cover  mb-2" loading="lazy">
-                                                @endforeach
-                                            @break
-
-                                            @case(Message::VIDEO)
-                                            @break
-
-                                            @default
-                                        @endswitch
-                                        <div class="hidden group-hover:block absolute left-[100%] top-0 bg-blue-200 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-black cursor-pointer p-1 px-3 text-sm button-reply"
-                                            data-reply-id="{{ $message->id }}">
-                                            <p>Reply</p>
                                         </div>
-
+                                        <img src="{{ $message->user->avatar }}" class="object-cover h-8 w-8 rounded-full"
+                                            alt="" />
+                                        <p class="text-sm absolute top-[100%] right-[38px]">{!! $message->reply_id ? '<strong>Reply to:</strong> ' . $message->reply->message : '' !!}</p>
                                     </div>
-                                    <p class="text-black ml-[10px]">{{ $message->created_at }}</p>
-                                    <p class="text-sm absolute top-[100%] left-[38px]">{!! $message->reply_id ? '<strong>Reply to:</strong> ' . $message->reply->message : '' !!}</p>
-                                </div>
-                            @endif
+                                @else
+                                    <div class="flex justify-start mb-[40px] message-box relative">
+
+                                        <img src="{{ $message->user->avatar }}" class="object-cover h-8 w-8 rounded-full"
+                                            alt="" />
+
+                                        <div
+                                            class="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white group relative ">
+                                            <p class="message-content">{{ $message->message }}</p>
+                                            @switch($message->media_type)
+                                                @case(Message::IMAGE)
+                                                    @foreach ($message->mediaMessages as $media)
+                                                        <img src="{{ $media->media_path }}" alt=""
+                                                            class="rounded-2xl w-[400px] object-cover  mb-2" loading="lazy">
+                                                    @endforeach
+                                                @break
+
+                                                @case(Message::VIDEO)
+                                                @break
+
+                                                @default
+                                            @endswitch
+                                            <div class="hidden group-hover:block absolute left-[100%] top-0 bg-blue-200 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-black cursor-pointer p-1 px-3 text-sm button-reply"
+                                                data-reply-id="{{ $message->id }}">
+                                                <p>Reply</p>
+                                            </div>
+
+                                        </div>
+                                        <p class="text-black ml-[10px]">{{ $message->created_at }}</p>
+                                        <p class="text-sm absolute top-[100%] left-[38px]">{!! $message->reply_id ? '<strong>Reply to:</strong> ' . $message->reply->message : '' !!}</p>
+                                    </div>
+                                @endif
 
 
-                            @empty
-                            @endforelse
+                                @empty
+                                @endforelse
 
-
+                            @endisset
 
                         </div>
                         <form class=" flex py-5 gap-2 relative">
@@ -163,12 +164,15 @@
                     <!-- end message -->
                     <div class="w-2/5 border-l-2 px-5">
                         <div class="flex flex-col">
-                            <div class="font-semibold text-xl py-4">{{ $otherUser->name }}</div>
-                            <img src="{{ $otherUser->avatar }}" alt="" />
-                            <div class="font-semibold py-4">{{ $otherUser->email }}</div>
-                            <div class="font-light">
-                                Mấy con chó chỉ mong tao sống nhiều khó khăn
-                            </div>
+                            @isset($otherUser)
+                                <div class="font-semibold text-xl py-4">{{ $otherUser->name }}</div>
+                                <img src="{{ $otherUser->avatar }}" alt="" />
+                                <div class="font-semibold py-4">{{ $otherUser->email }}</div>
+                                <div class="font-light">
+                                    Mấy con chó chỉ mong tao sống nhiều khó khăn
+                                </div>
+                            @endisset
+
                         </div>
                     </div>
                 </div>
@@ -178,11 +182,12 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"
             integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
-        <script>
-            const spinSvg = `
+        @isset($otherUser)
+            <script>
+                const spinSvg = `
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6.99998C9.1747 6.99987 6.99997 9.24998 7 12C7.00003 14.55 9.02119 17 12 17C14.7712 17 17 14.75 17 12"><animateTransform attributeName="transform" attributeType="XML" dur="560ms" from="0,12,12" repeatCount="indefinite" to="360,12,12" type="rotate"/></path></svg>
                     `
-            const otherMessage = data => `
+                const otherMessage = data => `
         <div class="flex mb-[30px] justify-start mb-4 message-box relative">
             <img src="{{ $otherUser->avatar }}"
                 class="object-cover h-8 w-8 rounded-full" alt="" />
@@ -199,13 +204,13 @@
         </div>
     `;
 
-            const myMessage = ({
-                message,
-                replyMessage
-            }) => {
-                console.log(message);
+                const myMessage = ({
+                    message,
+                    replyMessage
+                }) => {
+                    console.log(message);
 
-                return `
+                    return `
         <div class="flex mb-[30px] justify-end mb-4 reply-message relative ">
             <p>{{ Carbon\Carbon::now() }}</p>
             <div class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
@@ -217,142 +222,294 @@
             <p class="text-sm absolute top-[100%] right-[38px]">${message.replyMessage ? "<strong>Reply to:</strong> " + message.replyMessage : ""}</p>
         </div>
     `;
-            }
-            // ${data.message.media_type == 1 ? "<img src="+ data.message.media.media_path+" /> " : ""}
-            $(document).ready(() => {
-                const socket = io('http://localhost:3000');
-                const sendBtn = $('#send');
-                const messageInput = $('#message');
-                const messageList = $('#message-list');
-                const replyTo = $('#reply-to');
-                const replyIdInput = $('input[name="reply-id"]');
-                const receiverInput = $('input[name="receiver"]');
-                const fileMessage = $('#file');
-                const preview = document.getElementById('preview-file');
+                }
+                // ${data.message.media_type == 1 ? "<img src="+ data.message.media.media_path+" /> " : ""}
+                $(document).ready(() => {
+                    const socket = io('http://localhost:3000');
+                    const sendBtn = $('#send');
+                    const messageInput = $('#message');
+                    const messageList = $('#message-list');
+                    const replyTo = $('#reply-to');
+                    const replyIdInput = $('input[name="reply-id"]');
+                    const receiverInput = $('input[name="receiver"]');
+                    const fileMessage = $('#file');
+                    const preview = document.getElementById('preview-file');
 
-                messageInput.keydown(event => {
-                    if (event.key === 'Enter') {
-                        if (!messageInput.val() && !fileMessage.val()) return false;
-                        sendBtn.click();
-                    }
-                });
-
-                sendBtn.click(() => {
-
-                    if (!messageInput.val() && !fileMessage.val()) return;
-
-                    // messageList.append(myMessage({
-                    //     message: messageInput.val(),
-                    //     replyMessage: replyTo.text() || ""
-                    // }));
-
-                    $('#send').html(spinSvg);
-                    $('#send').attr('disabled', true)
-
-                    const formData = new FormData();
-                    formData.append('receiver_id', receiverInput.val());
-                    formData.append('message', messageInput.val());
-                    formData.append('reply_id', replyIdInput.val());
-
-                    if (fileMessage[0].files.length > 0){
-                        for (let i = 0; i < fileMessage[0].files.length; i++) {
-                            formData.append('file[]', fileMessage[0].files[i]);
-                        }
-                    }
-                        
-
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ route('send_messages') }}",
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        data: formData,
-
-                        success: function(response) {
-                            $('#send').text('Send');
-                            $('#send').removeAttr('disabled');
-                            console.log(response);
-
-                            messageList.append(myMessage({
-                                message: response.message,
-                                replyMessage: response.message.reply_id ? response
-                                    .message.reply.message : ""
-                            }));
-                            socket.emit('private-send', {
-                                sendUserId: '{{ auth()->user()->id }}',
-                                recieveUserId: receiverInput.val(),
-                                message: response.message,
-                            });
-                            messageInput.val('');
-                            replyIdInput.val('');
-                            replyTo.text('');
-                            replyTo.parent().hide();
-                            fileMessage.val('');
-                            scrollMessageToBottom();
-
+                    messageInput.keydown(event => {
+                        if (event.key === 'Enter') {
+                            if (!messageInput.val() && !fileMessage.val()) return false;
+                            sendBtn.click();
                         }
                     });
-                    preview.innerHTML = ''
-                });
 
-                socket.on(`message_from_${receiverInput.val()}_to_{{ auth()->user()->id }}`, data => {
-                    const createMessageElement = otherMessage(data.message);
-                    messageList.append(createMessageElement);
+                    sendBtn.click(() => {
+
+                        if (!messageInput.val() && !fileMessage.val()) return;
+
+                        // messageList.append(myMessage({
+                        //     message: messageInput.val(),
+                        //     replyMessage: replyTo.text() || ""
+                        // }));
+
+                        $('#send').html(spinSvg);
+                        $('#send').attr('disabled', true)
+
+                        const formData = new FormData();
+                        formData.append('receiver_id', receiverInput.val());
+                        formData.append('message', messageInput.val());
+                        formData.append('reply_id', replyIdInput.val());
+
+                        if (fileMessage[0].files.length > 0) {
+                            for (let i = 0; i < fileMessage[0].files.length; i++) {
+                                formData.append('file[]', fileMessage[0].files[i]);
+                            }
+                        }
+
+
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ route('send_messages') }}",
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            data: formData,
+
+                            success: function(response) {
+                                $('#send').text('Send');
+                                $('#send').removeAttr('disabled');
+                                console.log(response);
+
+                                messageList.append(myMessage({
+                                    message: response.message,
+                                    replyMessage: response.message.reply_id ? response
+                                        .message.reply.message : ""
+                                }));
+                                socket.emit('private-send', {
+                                    sendUserId: '{{ auth()->user()->id }}',
+                                    recieveUserId: receiverInput.val(),
+                                    message: response.message,
+                                });
+                                messageInput.val('');
+                                replyIdInput.val('');
+                                replyTo.text('');
+                                replyTo.parent().hide();
+                                fileMessage.val('');
+                                scrollMessageToBottom();
+
+                            }
+                        });
+                        preview.innerHTML = ''
+                    });
+
+                    socket.on(`message_from_${receiverInput.val()}_to_{{ auth()->user()->id }}`, data => {
+                        const createMessageElement = otherMessage(data.message);
+                        messageList.append(createMessageElement);
+                        scrollMessageToBottom();
+                    });
+
+                    const scrollMessageToBottom = () => {
+                        messageList[0].scrollTop = messageList[0].scrollHeight;
+                        messageList.find('img[loading="lazy"]').each(function() {
+                            this.addEventListener('load', function() {
+                                messageList[0].scrollTop = messageList[0].scrollHeight;
+                            });
+                        });
+                    };
                     scrollMessageToBottom();
                 });
 
-                const scrollMessageToBottom = () => {
-                    messageList[0].scrollTop = messageList[0].scrollHeight;
-                    messageList.find('img[loading="lazy"]').each(function() {
-                        this.addEventListener('load', function() {
-                            messageList[0].scrollTop = messageList[0].scrollHeight;
-                        });
-                    });
-                };
-                scrollMessageToBottom();
-            });
+                $(document).on('click', '.button-reply', function() {
+                    const replyId = $(this).data('reply-id');
+                    $('input[name="reply-id"]').val(replyId);
+                    const messageContent = $(this).closest('.message-box').find('.message-content').text();
+                    $('#reply-to').text(messageContent);
+                    $('#reply-to').parent().show();
+                    $('#message').focus();
+                });
 
-            $(document).on('click', '.button-reply', function() {
-                const replyId = $(this).data('reply-id');
-                $('input[name="reply-id"]').val(replyId);
-                const messageContent = $(this).closest('.message-box').find('.message-content').text();
-                $('#reply-to').text(messageContent);
-                $('#reply-to').parent().show();
-                $('#message').focus();
-            });
+                $(document).on('click', '#cancel-reply', function() {
+                    $('input[name="reply-id"]').val('');
+                    $('#reply-to').text('');
+                    $('#reply-to').parent().hide();
+                });
 
-            $(document).on('click', '#cancel-reply', function() {
-                $('input[name="reply-id"]').val('');
-                $('#reply-to').text('');
-                $('#reply-to').parent().hide();
-            });
+                document.getElementById('file').addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    const preview = document.getElementById('preview-file');
+                    if (file) {
+                        const reader = new FileReader();
+                        preview.innerHTML = spinSvg;
+                        reader.onload = function(e) {
+                            if (file.type.startsWith('video/')) {
+                                // Replace preview with a video element
+                                preview.innerHTML =
+                                    `<video class="m-h-20 m-w-20" controls src="${e.target.result}"></video>`;
+                            } else if (file.type.startsWith('image/')) {
+                                // Show image preview
+                                preview.innerHTML = `<img class="m-h-20 m-w-20" src="${e.target.result}" alt="">`;
+                            } else {
+                                preview.innerHTML = `<span>File type not supported for preview</span>`;
+                            }
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            </script>
+        @endisset
 
-            document.getElementById('file').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('preview-file');
-                if (file) {
-                    const reader = new FileReader();
-                    preview.innerHTML = spinSvg;
-                    reader.onload = function(e) {
-                        if (file.type.startsWith('video/')) {
-                            // Replace preview with a video element
-                            preview.innerHTML =
-                                `<video class="m-h-20 m-w-20" controls src="${e.target.result}"></video>`;
-                        } else if (file.type.startsWith('image/')) {
-                            // Show image preview
-                            preview.innerHTML = `<img class="m-h-20 m-w-20" src="${e.target.result}" alt="">`;
-                        } else {
-                            preview.innerHTML = `<span>File type not supported for preview</span>`;
-                        }
-                    };
-                    reader.readAsDataURL(file);
+
+        {{-- <script>
+    const spinSvg = `
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6.99998C9.1747 6.99987 6.99997 9.24998 7 12C7.00003 14.55 9.02119 17 12 17C14.7712 17 17 14.75 17 12"><animateTransform attributeName="transform" attributeType="XML" dur="560ms" from="0,12,12" repeatCount="indefinite" to="360,12,12" type="rotate"/></path></svg>
+    `;
+    
+    function otherMessage(data) {
+        return `
+            <div class="flex mb-[30px] justify-start mb-4 message-box relative">
+                <img src="{{ $otherUser->avatar }}" class="object-cover h-8 w-8 rounded-full" alt="" />
+                <div class="ml-2 py-3 px-4 bg-gray-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-white group relative ">
+                    <p class="message-content">${data.message ?? ""}</p>
+                    ${data.media_type == 1 ? data.media_messages.map(e => ("<img src="+ e.media_path+` class="w-[400px] rounded-2xl object-cover mb-2" /> ")).join('') : ""}
+                    <div class="hidden group-hover:block absolute left-[100%] top-0 bg-blue-200 rounded-br-3xl rounded-tr-3xl rounded-tl-xl text-black cursor-pointer p-1 px-3 text-sm button-reply" data-reply-id="${data.id}">
+                        <p>Reply</p>
+                    </div>
+                </div>
+                <p class="text-black">${data.created_at.replace('T', ' ').slice(0, 19)}</p>
+                <p class="text-sm absolute top-[100%] left-[38px]">${data.replyMessage ? "<strong>Reply to:</strong> " + data.replyMessage : ""}</p>
+            </div>
+        `;
+    }
+    
+    function myMessage({ message, replyMessage }) {
+        return `
+            <div class="flex mb-[30px] justify-end mb-4 reply-message relative ">
+                <p>{{ Carbon\\Carbon::now() }}</p>
+                <div class="mr-2 py-3 px-4 bg-blue-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl text-white">
+                    <p>${message.message ?? ''}</p>
+                    ${message.media_type == 1 ? message.media_messages.map(e => ("<img src="+ e.media_path+` class="w-[400px]  rounded-2xl object-cover  mb-2" /> ")).join('') : ""}
+                </div>
+                <img src="{{ auth()->user()->avatar }}" class="object-cover h-8 w-8 rounded-full" alt="" />
+                <p class="text-sm absolute top-[100%] right-[38px]">${message.replyMessage ? "<strong>Reply to:</strong> " + message.replyMessage : ""}</p>
+            </div>
+        `;
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const socket = io('http://localhost:3000');
+        const sendBtn = document.getElementById('send');
+        const messageInput = document.getElementById('message');
+        const messageList = document.getElementById('message-list');
+        const replyTo = document.getElementById('reply-to');
+        const replyIdInput = document.querySelector('input[name="reply-id"]');
+        const receiverInput = document.querySelector('input[name="receiver"]');
+        const fileMessage = document.getElementById('file');
+        const preview = document.getElementById('preview-file');
+    
+        messageInput.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                if (!messageInput.value && !fileMessage.value) return false;
+                sendBtn.click();
+            }
+        });
+    
+        sendBtn.addEventListener('click', function() {
+            if (!messageInput.value && !fileMessage.value) return;
+            sendBtn.innerHTML = spinSvg;
+            sendBtn.setAttribute('disabled', true);
+    
+            const formData = new FormData();
+            formData.append('receiver_id', receiverInput.value);
+            formData.append('message', messageInput.value);
+            formData.append('reply_id', replyIdInput.value);
+            if (fileMessage.files.length > 0) {
+                for (let i = 0; i < fileMessage.files.length; i++) {
+                    formData.append('file[]', fileMessage.files[i]);
                 }
+            }
+    
+            fetch("{{ route('send_messages') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(response => {
+                sendBtn.textContent = 'Send';
+                sendBtn.removeAttribute('disabled');
+                messageList.insertAdjacentHTML('beforeend', myMessage({
+                    message: response.message,
+                    replyMessage: response.message.reply_id ? response.message.reply.message : ""
+                }));
+                socket.emit('private-send', {
+                    sendUserId: '{{ auth()->user()->id }}',
+                    recieveUserId: receiverInput.value,
+                    message: response.message,
+                });
+                messageInput.value = '';
+                replyIdInput.value = '';
+                replyTo.textContent = '';
+                replyTo.parentElement.style.display = 'none';
+                fileMessage.value = '';
+                scrollMessageToBottom();
+                preview.innerHTML = '';
             });
-        </script>
+        });
+    
+        socket.on(`message_from_${receiverInput.value}_to_{{ auth()->user()->id }}`, function(data) {
+            messageList.insertAdjacentHTML('beforeend', otherMessage(data.message));
+            scrollMessageToBottom();
+        });
+    
+        function scrollMessageToBottom() {
+            messageList.scrollTop = messageList.scrollHeight;
+            messageList.querySelectorAll('img[loading="lazy"]').forEach(function(img) {
+                img.addEventListener('load', function() {
+                    messageList.scrollTop = messageList.scrollHeight;
+                });
+            });
+        }
+        scrollMessageToBottom();
+    
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('button-reply')) {
+                const replyId = e.target.getAttribute('data-reply-id');
+                replyIdInput.value = replyId;
+                const messageContent = e.target.closest('.message-box').querySelector('.message-content').textContent;
+                replyTo.textContent = messageContent;
+                replyTo.parentElement.style.display = '';
+                messageInput.focus();
+            }
+            if (e.target.id === 'cancel-reply') {
+                replyIdInput.value = '';
+                replyTo.textContent = '';
+                replyTo.parentElement.style.display = 'none';
+            }
+        });
+    
+        fileMessage.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                preview.innerHTML = spinSvg;
+                reader.onload = function(e) {
+                    if (file.type.startsWith('video/')) {
+                        preview.innerHTML = `<video class="m-h-20 m-w-20" controls src="${e.target.result}"></video>`;
+                    } else if (file.type.startsWith('image/')) {
+                        preview.innerHTML = `<img class="m-h-20 m-w-20" src="${e.target.result}" alt="">`;
+                    } else {
+                        preview.innerHTML = `<span>File type not supported for preview</span>`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+    </script> --}}
     </body>
 
     </html>
